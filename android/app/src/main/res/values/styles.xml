@@ -7,4 +7,13 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="navigation_view_style">
+        <item name="fontFamily">@font/nunito_sans_extrabold</item>
+    </style>
+
+    <style name="Widget.BottomNavigationView"
+        parent="Widget.Design.BottomNavigationView">
+        <item name="fontFamily">@font/nunito_sans_extrabold</item>
+    </style>
+
 </resources>
