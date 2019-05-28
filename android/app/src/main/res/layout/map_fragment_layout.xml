@@ -13,6 +13,7 @@
         android:textStyle="bold"
         android:maxLines="3"
         android:text="MAPA"
+        android:fontFamily="@font/nunito_sans_light"
         />
 
 </android.support.constraint.ConstraintLayout>
