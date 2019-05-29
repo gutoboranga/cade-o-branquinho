@@ -53,15 +53,18 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
     // --- Toolbar functions ---
 
     fun showMapsToolbar() {
+        supportActionBar!!.elevation = applicationContext.resources.getDimension(R.dimen.tab_layout_elevation)
         supportActionBar!!.title = "Cadê o branquinho?"
     }
 
     fun showWarningsToolbar() {
+        supportActionBar!!.elevation = applicationContext.resources.getDimension(R.dimen.tab_layout_elevation)
         supportActionBar!!.title = "Avisos"
     }
 
     fun showTimesToolbar() {
-        supportActionBar!!.title = "Horários"
+        supportActionBar!!.elevation = 0F
+        supportActionBar!!.title = "Horários de partida"
     }
 
 }

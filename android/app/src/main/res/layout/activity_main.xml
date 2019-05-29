@@ -14,7 +14,7 @@
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
         android:layout_alignParentTop="true"
-        android:elevation="4dp"
+        android:elevation="@dimen/tab_layout_elevation"
         android:theme="@style/ToolbarTheme"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
