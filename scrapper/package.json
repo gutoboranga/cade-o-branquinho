@@ -1,0 +1,17 @@
+{
+  "name": "scrapper",
+  "version": "1.0.0",
+  "description": "",
+  "main": "run.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dom-parser": "^0.1.6",
+    "get-element": "^0.1.1",
+    "xmldom": "^0.1.27",
+    "xmlhttprequest": "^1.8.0"
+  }
+}
