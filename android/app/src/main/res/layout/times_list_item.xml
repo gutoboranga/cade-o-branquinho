@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -7,10 +7,19 @@
     <TextView
         android:id="@+id/times_list_item.label"
         android:fontFamily="@font/nunito_sans_extrabold"
-        android:textSize="16dp"
+        android:textSize="24dp"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:padding="20dp"
+        android:padding="16dp"
+        android:text="12:30"
+        />
+    
+    <View
+        android:id="@+id/times_list_item.line"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#AAA"
+        android:layout_below="@+id/times_list_item.label"
         />
 
-</LinearLayout>
+</RelativeLayout>

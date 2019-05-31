@@ -21,15 +21,21 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         when (item.itemId) {
             R.id.navigation_map -> {
                 showMapsToolbar()
-                transaction.replace(R.id.fragment_container, mapFragment)
+                transaction.show(mapFragment)
+                transaction.hide(warningsFragment)
+                transaction.hide(timesFragment)
             }
             R.id.navigation_warnings -> {
                 showWarningsToolbar()
-                transaction.replace(R.id.fragment_container, warningsFragment)
+                transaction.hide(mapFragment)
+                transaction.show(warningsFragment)
+                transaction.hide(timesFragment)
             }
             R.id.navigation_times -> {
                 showTimesToolbar()
-                transaction.replace(R.id.fragment_container, timesFragment)
+                transaction.hide(mapFragment)
+                transaction.hide(warningsFragment)
+                transaction.show(timesFragment)
             }
         }
 
@@ -46,6 +52,12 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
+
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.add(R.id.fragment_container, mapFragment)
+        transaction.add(R.id.fragment_container, warningsFragment)
+        transaction.add(R.id.fragment_container, timesFragment)
+        transaction.commit()
 
         navigation.selectedItemId = R.id.navigation_map
     }

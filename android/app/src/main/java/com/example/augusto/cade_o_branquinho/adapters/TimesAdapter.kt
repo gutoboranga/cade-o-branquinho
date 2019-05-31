@@ -13,7 +13,7 @@ class TimesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private var mContext: Context? = null
     private val timesList = arrayListOf<String>()
 
-    constructor(context: Context, list: List<String>) {
+    constructor(context: Context, list: ArrayList<String>) {
         mContext = context
         timesList.clear()
         timesList.addAll(list)

@@ -9,10 +9,13 @@ import com.example.augusto.cade_o_branquinho.fragments.times_view_pager.WeekDays
 
 class SectionsPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
 
+    private val weekDaysTimesFragment = WeekDaysTimesFragment()
+    private val saturdayTimesFragment = SaturdayTimesFragment()
+
     override fun getItem(position: Int): Fragment? {
         when (position) {
-            0 -> return WeekDaysTimesFragment()
-            1 -> return SaturdayTimesFragment()
+            0 -> return weekDaysTimesFragment
+            1 -> return saturdayTimesFragment
         }
         return null
     }
