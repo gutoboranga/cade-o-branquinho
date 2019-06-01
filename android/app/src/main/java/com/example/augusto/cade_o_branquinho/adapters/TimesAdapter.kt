@@ -27,7 +27,7 @@ class TimesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     override fun onBindViewHolder(viewHolder: RecyclerView.ViewHolder, pos: Int) {
-        (viewHolder as TimeViewHolder).bind(timesList.get(pos))
+        (viewHolder as TimeViewHolder).bind(timesList.get(pos), pos)
     }
 
     override fun getItemCount(): Int {
@@ -39,8 +39,13 @@ class TimesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
         var isExpanded = false
         var onItemClickCompletion: ((Int) -> Unit)? = null
 
-        fun bind(t: String) {
+        fun bind(t: String, i: Int) {
+            itemView.times_list_item_index.text = makeIndexText(i)
             itemView.times_list_item_label.text = t
+        }
+
+        private fun makeIndexText(pos: Int): String {
+            return (pos + 1).toString() + "ª VIAGEM"
         }
     }
 }

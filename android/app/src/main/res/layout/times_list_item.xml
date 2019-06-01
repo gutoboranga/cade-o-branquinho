@@ -7,11 +7,27 @@
     <TextView
         android:id="@+id/times_list_item.label"
         android:fontFamily="@font/nunito_sans_extrabold"
-        android:textSize="24dp"
         android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        android:padding="16dp"
+        android:layout_width="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="20dp"
+        android:padding="12dp"
+        android:textSize="28dp"
+        android:textColor="#444"
         android:text="12:30"
+        />
+
+    <TextView
+        android:id="@+id/times_list_item.index"
+        android:fontFamily="@font/nunito_sans_bold"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="20dp"
+        android:layout_centerInParent="true"
+        android:textColor="#888"
+        android:textSize="14dp"
+        android:text="1 VIAGEM"
         />
     
     <View
