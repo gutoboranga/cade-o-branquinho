@@ -1,0 +1,73 @@
+[
+    {
+        "name" : "Terminal",
+        "latitude" : -30.072246,
+        "longitude" : -51.117995
+    },
+    
+    {
+        "name" : "Represa",
+        "latitude" : -30.074543,
+        "longitude" : -51.119110
+    },
+    
+    {
+        "name" : "Marítimo",
+        "latitude" : -30.075572,
+        "longitude" : -51.116027
+    },
+    
+    {
+        "name" : "IPH",
+        "latitude" : -30.076673,
+        "longitude" : -51.113491
+    },
+    
+    {
+        "name" : "Bento",
+        "latitude" : -30.077885,
+        "longitude" : -51.115925
+    },
+    
+    {
+        "name" : "Aplicação",
+        "latitude" : -30.075979,
+        "longitude" : -51.124612
+    },
+    
+    {
+        "name" : "Ponte",
+        "latitude" : -30.075478,
+        "longitude" : -51.122539
+    },
+    
+    {
+        "name" : "Polar",
+        "latitude" : -30.073951,
+        "longitude" : -51.123435
+    },
+    
+    {
+        "name" : "Faurgs",
+        "latitude" : -30.070526,
+        "longitude" : -51.121286
+    },
+    
+    {
+        "name" : "Tecnólogos",
+        "latitude" : -30.067979,
+        "longitude" : -51.122393
+    },
+    
+    {
+        "name" : "Bloco 4",
+        "latitude" : -30.067216,
+        "longitude" : -51.120015
+    },
+    
+    {
+        "name" : "CREAL",
+        "latitude" : -30.070037,
+        "longitude" :  -51.118215
+    }
+]
