@@ -2,23 +2,23 @@ package com.example.augusto.cade_o_branquinho.utils
 
 import android.content.Context
 import org.json.JSONObject
-import org.json.JSONArray
-import java.io.InputStream
 
 class DepartureTimesUtils {
 
-    var context: Context? = null
+    private var context: Context? = null
+    private var jsonUtils: JsonUtils? = null
 
-    val FILE_NAME = "departures.json"
-    val WEEK_DAYS_TAG = "week_days"
-    val SATURDAY_TAG = "saturday"
+    private val FILE_NAME = "departures.json"
+    private val WEEK_DAYS_TAG = "week_days"
+    private val SATURDAY_TAG = "saturday"
 
     constructor(context: Context) {
         this.context = context
+        this.jsonUtils = JsonUtils(context)
     }
 
     fun getWeekDays() : ArrayList<String>? {
-        val data: String = jsonAsString() ?: return null
+        val data: String = jsonUtils!!.readFile(FILE_NAME) ?: return null
 
         val jsonObj = JSONObject(data.substring(data.indexOf("{"), data.lastIndexOf("}") + 1))
         val weekDaysJsonArray = jsonObj.getJSONArray(WEEK_DAYS_TAG)
@@ -32,7 +32,7 @@ class DepartureTimesUtils {
     }
 
     fun getSaturdays() : ArrayList<String>? {
-        val data: String = jsonAsString() ?: return null
+        val data: String = jsonUtils!!.readFile(FILE_NAME) ?: return null
 
         val jsonObj = JSONObject(data.substring(data.indexOf("{"), data.lastIndexOf("}") + 1))
         val weekDaysJsonArray = jsonObj.getJSONArray(SATURDAY_TAG)
@@ -43,17 +43,6 @@ class DepartureTimesUtils {
         }
 
         return arrayList
-    }
-
-    private fun jsonAsString(): String? {
-        return try {
-            val inputStream: InputStream = context!!.assets.open(FILE_NAME)
-            val inputString = inputStream.bufferedReader().use{it.readText()}
-            inputString
-        } catch (e:Exception){
-            null
-        }
-
     }
 
 }
