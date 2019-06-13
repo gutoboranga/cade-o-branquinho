@@ -1,6 +1,7 @@
 package com.example.augusto.cade_o_branquinho.utils
 
 import java.util.*
+import kotlin.math.min
 
 class TimeManager() {
 

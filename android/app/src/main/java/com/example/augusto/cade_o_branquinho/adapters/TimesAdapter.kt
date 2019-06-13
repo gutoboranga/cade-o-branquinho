@@ -42,13 +42,7 @@ class TimesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         fun bind(t: DepartureTime, i: Int) {
             itemView.times_list_item_index.text = makeIndexText(i)
-
-            var minute =  t.minute.toString()
-            if (minute.length == 1) {
-               minute += "0"
-            }
-
-            itemView.times_list_item_label.text = t.hour.toString() + ":" + minute
+            itemView.times_list_item_label.text = t.getFormatted()
         }
 
         private fun makeIndexText(pos: Int): String {
