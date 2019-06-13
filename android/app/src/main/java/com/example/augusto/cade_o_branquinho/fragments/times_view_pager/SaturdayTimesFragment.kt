@@ -8,23 +8,17 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.augusto.cade_o_branquinho.R
 import com.example.augusto.cade_o_branquinho.adapters.TimesAdapter
-import com.example.augusto.cade_o_branquinho.utils.DepartureTimesUtils
+import com.example.augusto.cade_o_branquinho.utils.DepartureTimes
 import kotlinx.android.synthetic.main.saturday_times_layout.view.*
-import kotlinx.android.synthetic.main.week_days_times_layout.view.*
 
 
 class SaturdayTimesFragment : Fragment() {
 
-    private var adapter: TimesAdapter? = null
-    private var weekDays = arrayListOf<String>()
+    private lateinit var adapter: TimesAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        val parser = DepartureTimesUtils(context!!)
-        weekDays = parser.getSaturdays() ?: arrayListOf()
-
-        adapter = TimesAdapter(activity!!, weekDays)
+        adapter = TimesAdapter(activity!!, DepartureTimes.saturdays)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

@@ -1,6 +1,5 @@
 package com.example.augusto.cade_o_branquinho.fragments.times_view_pager
 
-import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
@@ -9,22 +8,17 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.augusto.cade_o_branquinho.R
 import com.example.augusto.cade_o_branquinho.adapters.TimesAdapter
-import com.example.augusto.cade_o_branquinho.utils.DepartureTimesUtils
+import com.example.augusto.cade_o_branquinho.utils.DepartureTimes
 import kotlinx.android.synthetic.main.week_days_times_layout.view.*
 
 
 class WeekDaysTimesFragment : Fragment() {
 
-    private var adapter: TimesAdapter? = null
-    private var weekDays = arrayListOf<String>()
+    private lateinit var adapter: TimesAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        val parser = DepartureTimesUtils(context!!)
-        weekDays = parser.getWeekDays() ?: arrayListOf()
-
-        adapter = TimesAdapter(activity!!, weekDays)
+        adapter = TimesAdapter(activity!!, DepartureTimes.weekdays)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

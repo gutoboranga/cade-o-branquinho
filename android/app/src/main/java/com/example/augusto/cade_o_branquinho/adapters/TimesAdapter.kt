@@ -6,14 +6,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.augusto.cade_o_branquinho.R
+import com.example.augusto.cade_o_branquinho.utils.DepartureTime
 import kotlinx.android.synthetic.main.times_list_item.view.*
 
 class TimesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private var mContext: Context? = null
-    private val timesList = arrayListOf<String>()
+    private val timesList = arrayListOf<DepartureTime>()
 
-    constructor(context: Context, list: ArrayList<String>) {
+    constructor(context: Context, list: ArrayList<DepartureTime>) {
         mContext = context
         timesList.clear()
         timesList.addAll(list)
@@ -39,9 +40,15 @@ class TimesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
         var isExpanded = false
         var onItemClickCompletion: ((Int) -> Unit)? = null
 
-        fun bind(t: String, i: Int) {
+        fun bind(t: DepartureTime, i: Int) {
             itemView.times_list_item_index.text = makeIndexText(i)
-            itemView.times_list_item_label.text = t
+
+            var minute =  t.minute.toString()
+            if (minute.length == 1) {
+               minute += "0"
+            }
+
+            itemView.times_list_item_label.text = t.hour.toString() + ":" + minute
         }
 
         private fun makeIndexText(pos: Int): String {

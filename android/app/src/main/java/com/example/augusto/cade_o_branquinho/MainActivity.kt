@@ -8,6 +8,8 @@ import android.support.v7.widget.Toolbar
 import com.example.augusto.cade_o_branquinho.fragments.MapFragment
 import com.example.augusto.cade_o_branquinho.fragments.TimesFragment
 import com.example.augusto.cade_o_branquinho.fragments.WarningsFragment
+import com.example.augusto.cade_o_branquinho.utils.JsonDataParser
+import com.example.augusto.cade_o_branquinho.utils.JsonUtils
 
 class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener {
 
@@ -60,6 +62,9 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         transaction.commit()
 
         navigation.selectedItemId = R.id.navigation_map
+
+        // vai parsear os dados dos jsons locais
+        JsonDataParser(JsonUtils(this)).run()
     }
 
     // --- Toolbar functions ---

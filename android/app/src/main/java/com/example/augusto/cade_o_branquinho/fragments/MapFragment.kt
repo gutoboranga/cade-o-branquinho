@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import com.example.augusto.cade_o_branquinho.R
 import com.example.augusto.cade_o_branquinho.model.BusStop
 import com.example.augusto.cade_o_branquinho.utils.BusStopLocationsUtils
+import com.example.augusto.cade_o_branquinho.utils.TimeManager
 
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -21,6 +22,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     private lateinit var map: GoogleMap
     private lateinit var busStops: ArrayList<BusStop>
 
+    private val timeManager = TimeManager()
     private val mapCenter = LatLng(-30.071224, -51.119861)
     private val mapInitialZoom = 15.0f
 
@@ -33,6 +35,11 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
         val busStopLocationsUtils = BusStopLocationsUtils(this.context!!)
         this.busStops = busStopLocationsUtils.getLocations()
+
+        val lastDeparture = timeManager.getLastDeparture()
+        if (lastDeparture != null) {
+            println("LAST DEPARTURE: " + lastDeparture.hour + ":" + lastDeparture.minute)
+        }
 
         return view
     }

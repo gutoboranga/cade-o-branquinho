@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import com.example.augusto.cade_o_branquinho.R
 import kotlinx.android.synthetic.main.times_fragment_layout.view.*
 import com.example.augusto.cade_o_branquinho.adapters.SectionsPagerAdapter
-import com.example.augusto.cade_o_branquinho.utils.DepartureTimesUtils
 
 
 class TimesFragment : Fragment() {
