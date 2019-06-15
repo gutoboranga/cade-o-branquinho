@@ -62,15 +62,6 @@ function scrape(dom) {
     }
 }
 
-getAlerts(function(alerts) {
-    console.log(alerts);
-    
-    // const fs = require('fs');
-    // fs.writeFile("test.txt", "[" + alerts + "]", function(err) {
-    //     if(err) {
-    //         return console.log(err);
-    //     }
-    //
-    //     console.log("The file was saved!");
-    // });
-})
+module.exports = {
+  getAlerts: getAlerts,
+}

@@ -2,6 +2,8 @@ import 'dotenv/config';
 import cors from 'cors';
 import express from 'express';
 
+var scrapper = require('../scrapper/run.js');
+
 const app = express();
 
 app.get('/', (req, res) => {
