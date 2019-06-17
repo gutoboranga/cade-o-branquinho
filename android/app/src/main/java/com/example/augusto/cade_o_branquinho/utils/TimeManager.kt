@@ -41,6 +41,38 @@ class TimeManager() {
         return last
     }
 
+    fun getNextDepartureWeek(): DepartureTime? {
+        val times = DepartureTimes.weekdays
+
+        var next: DepartureTime? = DepartureTime(0,0)
+        val now= now()
+
+        for (i in 0..(times.size - 1)) {
+            val time= now()
+
+            time.hours = times[i].hour
+            time.minutes = times[i].minute
+
+            if (now.compareTo(time) < 0) {
+                next = times[i]
+                break
+            }
+        }
+
+        return next
+    }
+
+    fun hasPassed(time: DepartureTime): Boolean {
+        val timeDate= now()
+
+        println("NOW: ${timeDate.hours}:${timeDate.minutes}")
+
+        timeDate.hours = time.hour
+        timeDate.minutes = time.minute
+
+        return (now() > timeDate)
+    }
+
     private fun getLastDepartureSaturday(): DepartureTime {
         val times = DepartureTimes.saturdays
 

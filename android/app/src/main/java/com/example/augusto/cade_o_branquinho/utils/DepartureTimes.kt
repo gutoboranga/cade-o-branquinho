@@ -9,10 +9,25 @@ class DepartureTimes {
 
 }
 
-class DepartureTime(var hour: Int, var minute: Int) {
+class DepartureTime() {
+
+    var hour: Int = 0
+    var minute: Int = 0
 
     val MAX_HOUR = 24
     val MAX_MIN = 60
+
+    constructor(h: Int, m: Int) : this() {
+        hour = h
+        minute = m
+    }
+
+    constructor(str: String) : this() {
+        val parts = str.split(':')
+
+        hour = parts[0].toInt()
+        minute = parts[1].toInt()
+    }
 
     fun sum(minutes: Int) {
         var newMinutes = this.minute + minutes

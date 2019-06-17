@@ -1,0 +1,14 @@
+{
+    "TERMINAL" : 0,
+    "REPRESA" : 1,
+    "MARITIMO" : 2,
+    "IPH" : 3,
+    "BENTO" : 5,
+    "APLICACAO" : 7,
+    "PONTE" : 9,
+    "POLAR" : 10,
+    "FAURGS" : 11,
+    "TECNOLOGOS" : 12,
+    "BLOCO_4" : 12,
+    "CREAL" : 13
+}

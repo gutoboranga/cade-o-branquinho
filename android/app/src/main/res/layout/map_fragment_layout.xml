@@ -13,11 +13,4 @@
         tools:context=".MainActivity"
         android:name="com.google.android.gms.maps.SupportMapFragment"/>
 
-    <TextView
-        android:id="@+id/maps_fragment.last_departure_textview"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:fontFamily="@font/nunito_sans_extrabold"
-        android:textSize="20dp"/>
-
 </android.support.constraint.ConstraintLayout>
