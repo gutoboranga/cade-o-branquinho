@@ -10,16 +10,16 @@ import android.content.Context.LOCATION_SERVICE
 import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationListener
+import android.os.Handler
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v4.content.ContextCompat.getSystemService
+import android.support.v7.app.AlertDialog
 import android.widget.Button
 import android.widget.TextView
+import okhttp3.*
+import okio.ByteString
 import javax.xml.datatype.DatatypeConstants.SECONDS
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.WebSocket
-import okhttp3.WebSocketListener
 import java.security.cert.X509Certificate
 import java.util.concurrent.TimeUnit
 import javax.net.ssl.HttpsURLConnection
@@ -28,7 +28,7 @@ import javax.net.ssl.TrustManager
 import javax.net.ssl.X509TrustManager
 
 
-class MainActivity : AppCompatActivity(), LocationListener  {
+class MainActivity : AppCompatActivity(), LocationListener, WSListener  {
 
     private lateinit var locationManager: LocationManager
     private var lastLocation: Location? = null
@@ -89,6 +89,7 @@ class MainActivity : AppCompatActivity(), LocationListener  {
 
 
         val listener = MySocketListener()
+        listener.setManager(this)
         webSocket = client.newWebSocket(request, listener)
 
     }
@@ -141,4 +142,41 @@ class MainActivity : AppCompatActivity(), LocationListener  {
     override fun onProviderDisabled(p0: String?) {
         println("onProviderDisabled: ${p0}")
     }
+
+    // === WSListener implementation ===
+
+    override fun onOpen(webSocket: WebSocket, response: Response) {}
+    override fun onMessage(webSocket: WebSocket?, text: String?) {}
+    override fun onMessage(webSocket: WebSocket?, bytes: ByteString?) {}
+    override fun onClosing(webSocket: WebSocket?, code: Int, reason: String?) {
+        showWarning("Fim da conexão", "A conexão ao servidor foi encerrada.", false)
+    }
+
+    override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) {
+        showWarning("Erro", "Falha ao conectar ao servidor. Tente novamente em seguida.", false)
+    }
+
+    private fun showWarning(title: String, message: String, isSending: Boolean) {
+        val mainHandler = Handler(this.mainLooper)
+        val activity = this
+
+        val runnable = object : Runnable {
+            override fun run() {
+                val builder = AlertDialog.Builder(activity)
+                val dialog = builder.
+                    setTitle(title).
+                    setMessage(message).
+                    setNeutralButton("Ok", null).create()
+
+                dialog.show()
+
+                setIsSending(isSending)
+            }
+        }
+
+
+
+        mainHandler.post(runnable)
+    }
+
 }
