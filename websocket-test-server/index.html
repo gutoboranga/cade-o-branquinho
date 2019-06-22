@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head>
+        <meta charset="utf-8">
+        <title></title>
+    </head>
+    <script type="text/javascript">
+        
+        function newWebSocket() {
+            
+            console.log("trying to create websocket")
+            
+            const WS_URL = 'ws://localhost:3000/websocket';
+            const FPS = 3;
+            const ws = new WebSocket(WS_URL);
+            ws.onopen = () => {
+                console.log(`Connected to ${WS_URL}`);
+            }
+        
+            ws.onmessage = function (e) {
+                document.getElementById("received_data").innerHTML += "<br>" + e.data;
+            };
+        }
+        
+        function sendData() {
+            console.log("trying to create websocket")
+            
+            const WS_URL = 'ws://localhost:3000/websocket-provider';
+            const FPS = 3;
+            const ws = new WebSocket(WS_URL);
+            ws.onopen = () => {
+                console.log(`Connected to ${WS_URL}`);
+                ws.send("CARAIO VOADOR!!!")
+            }
+        
+            
+        }
+        
+    </script>
+    <body>
+        <h1>Teste</h1>
+        <button onclick="newWebSocket()">Criar Web Socket</button>
+        <br><br>
+        <button onclick="sendData()">Enviar dados</button>
+        <div id="received_data"></div>
+    </body>
+</html>
