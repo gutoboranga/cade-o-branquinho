@@ -32,6 +32,7 @@ class MainActivity : AppCompatActivity(), LocationListener, WSListener  {
 
     private lateinit var locationManager: LocationManager
     private var lastLocation: Location? = null
+    private var directionInDegrees = 0.0
 
     private lateinit var sendButton: Button
     private var isSending = false
@@ -94,8 +95,8 @@ class MainActivity : AppCompatActivity(), LocationListener, WSListener  {
 
     }
 
-    private fun makeMessage(lat: Double, long: Double): String {
-        return "{ \"latitude\" : ${lat}, \"longitude\" : ${long}}"
+    private fun makeMessage(lat: Double, long: Double, direction: Double): String {
+        return "{ \"latitude\" : $lat, \"longitude\" : $long, \"direction\": $direction }"
     }
 
     private fun setIsSending(s: Boolean) {
@@ -123,10 +124,13 @@ class MainActivity : AppCompatActivity(), LocationListener, WSListener  {
         if (p0 != null) {
             findViewById<TextView>(R.id.latitude_value_gps).text = p0.latitude.toString()
             findViewById<TextView>(R.id.longitude_value_gps).text = p0.longitude.toString()
+
+            calculateDirectionInDegrees(p0)
+
             lastLocation = p0
 
             if (::webSocket.isInitialized) {
-                webSocket.send(makeMessage(p0.latitude, p0.longitude))
+                webSocket.send(makeMessage(p0.latitude, p0.longitude, directionInDegrees))
             }
         }
     }
@@ -174,9 +178,21 @@ class MainActivity : AppCompatActivity(), LocationListener, WSListener  {
             }
         }
 
-
-
         mainHandler.post(runnable)
     }
 
+
+
+
+    fun calculateDirectionInDegrees(newLocation: Location) {
+        if (lastLocation != null) {
+            val dLon = newLocation.longitude - lastLocation!!.longitude
+            val y = Math.sin(dLon)
+            val x = Math.cos(lastLocation!!.latitude) * Math.sin(newLocation.latitude) - Math.sin(lastLocation!!.latitude) + Math.cos(newLocation.latitude) * Math.cos(dLon)
+
+            directionInDegrees = Math.atan2(y, x) * 180 / Math.PI
+
+            if (directionInDegrees < 0) directionInDegrees += 360
+        }
+    }
 }
