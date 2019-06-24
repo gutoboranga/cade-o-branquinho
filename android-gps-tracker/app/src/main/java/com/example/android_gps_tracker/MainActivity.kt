@@ -6,26 +6,18 @@ import android.content.Context
 import android.location.LocationManager
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.content.Context.LOCATION_SERVICE
 import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationListener
 import android.os.Handler
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
-import android.support.v4.content.ContextCompat.getSystemService
 import android.support.v7.app.AlertDialog
 import android.widget.Button
 import android.widget.TextView
 import okhttp3.*
 import okio.ByteString
-import javax.xml.datatype.DatatypeConstants.SECONDS
-import java.security.cert.X509Certificate
 import java.util.concurrent.TimeUnit
-import javax.net.ssl.HttpsURLConnection
-import javax.net.ssl.SSLContext
-import javax.net.ssl.TrustManager
-import javax.net.ssl.X509TrustManager
 
 
 class MainActivity : AppCompatActivity(), LocationListener, WSListener  {
@@ -33,12 +25,14 @@ class MainActivity : AppCompatActivity(), LocationListener, WSListener  {
     private lateinit var locationManager: LocationManager
     private var lastLocation: Location? = null
     private var directionInDegrees = 0.0
+    private var directionInDegreesTest = 0.0
 
     private lateinit var sendButton: Button
     private var isSending = false
     private lateinit var webSocket: WebSocket
 
-    private val SERVER_URL = "ws://192.168.0.106:3000/websocket-provider"
+//    private val SERVER_URL = "ws://192.168.0.106:3000/websocket-provider"
+    private val SERVER_URL = "ws://cade-o-branquinho-server.herokuapp.com/websocket-provider"
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -95,8 +89,8 @@ class MainActivity : AppCompatActivity(), LocationListener, WSListener  {
 
     }
 
-    private fun makeMessage(lat: Double, long: Double, direction: Double): String {
-        return "{ \"latitude\" : $lat, \"longitude\" : $long, \"direction\": $direction }"
+    private fun makeMessage(lat: Double, long: Double, direction: Double, bearing: Float): String {
+        return "{ \"latitude\" : $lat, \"longitude\" : $long, \"direction\": $direction, \"test\" : $directionInDegreesTest, \"bearing\" : ${bearing} }"
     }
 
     private fun setIsSending(s: Boolean) {
@@ -130,8 +124,11 @@ class MainActivity : AppCompatActivity(), LocationListener, WSListener  {
             lastLocation = p0
 
             if (::webSocket.isInitialized) {
-                webSocket.send(makeMessage(p0.latitude, p0.longitude, directionInDegrees))
+                webSocket.send(makeMessage(p0.latitude, p0.longitude, directionInDegrees, p0.bearing))
             }
+
+//            val view = findViewById<TextView>(R.id.content)
+//            view.text = "${view.text}\n${makeMessage(p0.latitude, p0.longitude, directionInDegrees)}"
         }
     }
 
@@ -174,14 +171,11 @@ class MainActivity : AppCompatActivity(), LocationListener, WSListener  {
 
                 dialog.show()
 
-                setIsSending(isSending)
             }
         }
 
         mainHandler.post(runnable)
     }
-
-
 
 
     fun calculateDirectionInDegrees(newLocation: Location) {
@@ -193,6 +187,8 @@ class MainActivity : AppCompatActivity(), LocationListener, WSListener  {
             directionInDegrees = Math.atan2(y, x) * 180 / Math.PI
 
             if (directionInDegrees < 0) directionInDegrees += 360
+
+            directionInDegreesTest += 180.0 - directionInDegrees
         }
     }
 }
