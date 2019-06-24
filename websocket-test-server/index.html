@@ -10,7 +10,7 @@
             
             console.log("trying to create websocket")
             
-            const WS_URL = 'ws://localhost:3000/websocket';
+            const WS_URL = 'ws://localhost:5000/websocket';
             const FPS = 3;
             const ws = new WebSocket(WS_URL);
             ws.onopen = () => {
@@ -22,26 +22,10 @@
             };
         }
         
-        function sendData() {
-            console.log("trying to create websocket")
-            
-            const WS_URL = 'ws://localhost:3000/websocket-provider';
-            const FPS = 3;
-            const ws = new WebSocket(WS_URL);
-            ws.onopen = () => {
-                console.log(`Connected to ${WS_URL}`);
-                ws.send("CARAIO VOADOR!!!")
-            }
-        
-            
-        }
-        
     </script>
     <body>
-        <h1>Teste</h1>
+        <h1>Websocket consumer</h1>
         <button onclick="newWebSocket()">Criar Web Socket</button>
-        <br><br>
-        <button onclick="sendData()">Enviar dados</button>
         <div id="received_data"></div>
     </body>
 </html>
