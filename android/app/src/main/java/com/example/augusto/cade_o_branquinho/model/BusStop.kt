@@ -1,5 +1,6 @@
 package com.example.augusto.cade_o_branquinho.model
 
+import com.example.augusto.cade_o_branquinho.R
 import com.example.augusto.cade_o_branquinho.utils.DepartureTime
 import com.google.android.gms.maps.model.LatLng
 
@@ -61,6 +62,25 @@ enum class BusStop {
             TECNOLOGOS ->"TECNOLOGOS"
             BLOCO_4 -> "BLOCO_4"
             CREAL -> "CREAL"
+        }
+
+    }
+
+    fun getMarkerIcon(): Int{
+
+        return when (this) {
+            TERMINAL -> R.drawable.placa_terminal
+            REPRESA -> R.drawable.placa_represa
+            MARITIMO -> R.drawable.placa_maritimo
+            IPH -> R.drawable.placa_iph
+            BENTO-> R.drawable.placa_bento
+            APLICACAO -> R.drawable.placa_aplicacao
+            PONTE -> R.drawable.placa_ponte
+            POLAR -> R.drawable.placa_polar
+            FAURGS -> R.drawable.placa_faurgs
+            TECNOLOGOS -> R.drawable.placa_tecnologos
+            BLOCO_4 -> R.drawable.placa_bloco_4
+            CREAL -> R.drawable.placa_creal
         }
 
     }

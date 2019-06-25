@@ -35,8 +35,8 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
 
     // map related vars
     private lateinit var map: GoogleMap
-    //    private val mapCenter = LatLng(-30.071224, -51.119861)
-    private val mapCenter = LatLng(-29.75895163, -50.01396854)
+    private val mapCenter = LatLng(-30.071224, -51.119861)
+//    private val mapCenter = LatLng(-29.75895163, -50.01396854)
     private val mapInitialZoom = 15.0f
 
     // bus stops vars
@@ -88,12 +88,14 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
 
     override fun onMapReady(p0: GoogleMap?) {
         map = p0!!
+        map.uiSettings.isRotateGesturesEnabled = false
 
         for (item in busStops) {
             val pos = item.getLocation()
             map.addMarker(MarkerOptions()
                     .position(pos)
                     .title(item.name)
+                    .icon(BitmapDescriptorFactory.fromResource(item.getMarkerIcon()))
                     .snippet(item.getId().toString())
             )
         }
@@ -213,21 +215,27 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
     override fun onMessage(webSocket: WebSocket?, bytes: ByteString?) {}
 
     override fun onClosing(webSocket: WebSocket?, code: Int, reason: String?) {
+        val message = "Falha ao conectar ao servidor"
         if (shouldShowConnectionError) {
             shouldShowConnectionError = false
-            showWarning("Fim da conexão", "A conexão ao servidor foi encerrada.", false)
+            showWarning("Fim da conexão", message, false)
+        }
+        else {
+            Toast.makeText(context!!, message, Toast.LENGTH_SHORT).show()
         }
         this.webSocket = null
-        shouldRetryConnection = true
     }
 
     override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) {
+        val shortMessage = "Falha ao conectar ao servidor"
+
         if (shouldShowConnectionError) {
             shouldShowConnectionError = false
-            showWarning("Erro de conexão", "Falha ao conectar ao servidor. Tente novamente em seguida.", false)
+            showWarning("Erro de conexão", "${shortMessage}. Tente novamente em seguida.", false)
+        } else {
+            Toast.makeText(context!!, shortMessage, Toast.LENGTH_SHORT).show()
         }
         this.webSocket = null
-        shouldRetryConnection = true
     }
 
     private fun showWarning(title: String, message: String, isSending: Boolean) {
@@ -256,17 +264,17 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
     // move o pin do bus para a nova posição
     private fun showMarker(location: BusLocation) {
         val latLng = LatLng(location.getLatitude(), location.getLongitude())
+        val rotation = location.getBearing()
 
-        currentLocationMarker?.remove()
-        currentLocationMarker = map.addMarker(MarkerOptions()
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.bus1))
-                .position(latLng)
-                .rotation(location.getBearing()))
+        if (currentLocationMarker == null)
+            currentLocationMarker = map.addMarker(MarkerOptions()
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.bus1))
+                    .position(latLng)
+                    .rotation(rotation))
+        else
+            currentLocationMarker!!.position = latLng
+            currentLocationMarker!!.rotation = rotation
 
-//        if (currentLocationMarker == null)
-//            currentLocationMarker = map.addMarker(MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker()).position(latLng))
-//        else
-//            MarkerAnimation.animateMarkerToGB(currentLocationMarker!!, latLng, LatLngInterpolator.Spherical());
     }
 
 }
