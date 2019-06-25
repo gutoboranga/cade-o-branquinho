@@ -37,7 +37,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
     private lateinit var map: GoogleMap
     private val mapCenter = LatLng(-30.071224, -51.119861)
 //    private val mapCenter = LatLng(-29.75895163, -50.01396854)
-    private val mapInitialZoom = 15.0f
+    private val mapInitialZoom = 15.3f
 
     // bus stops vars
     private lateinit var busStops: ArrayList<BusStop>
@@ -174,6 +174,11 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
         val view = layoutInflater.inflate(R.layout.bus_stop_detail, null)
         view.bus_stop_detail_header_title.text = b.getName()
         view.bus_stop_detail_next_time_value_label.text = b.nextTime!!.getFormatted()
+
+        if (b == BusStop.TERMINAL) {
+            view.bus_stop_detail_header.setBackgroundColor(resources.getColor(R.color.colorAccent))
+            view.bus_stop_detail_header_title.setTextColor(resources.getColor(R.color.darkTextColor))
+        }
 
         val dialog = AlertDialog.Builder(this.context)
                 .setView(view)
