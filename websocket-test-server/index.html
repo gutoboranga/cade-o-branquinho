@@ -5,23 +5,23 @@
         <title></title>
     </head>
     <script type="text/javascript">
-        
+
         function newWebSocket() {
-            
+
             console.log("trying to create websocket")
-            
-            const WS_URL = 'ws://localhost:5000/websocket';
+
+            const WS_URL = 'wss://cade-o-branquinho-server.herokuapp.com/websocket';
             const FPS = 3;
             const ws = new WebSocket(WS_URL);
             ws.onopen = () => {
                 console.log(`Connected to ${WS_URL}`);
             }
-        
+
             ws.onmessage = function (e) {
                 document.getElementById("received_data").innerHTML += "<br>" + e.data;
             };
         }
-        
+
     </script>
     <body>
         <h1>Websocket consumer</h1>
