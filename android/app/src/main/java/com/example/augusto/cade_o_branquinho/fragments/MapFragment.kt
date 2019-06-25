@@ -25,10 +25,13 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import io.ticofab.androidgpxparser.parser.GPXParser
+import io.ticofab.androidgpxparser.parser.domain.Gpx
 import kotlinx.android.synthetic.main.bus_stop_detail.view.*
 import okhttp3.Response
 import okhttp3.WebSocket
 import okio.ByteString
+import java.lang.Exception
 
 class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener, WSListener {
 
@@ -78,6 +81,12 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
 
         // cria um socket para receber a localização do bus
         webSocket = WebSocketUtils().openSocket(this)
+
+        // get the locations of the bus' route
+        val busRoutePoints = GPXUtils().getPoints(activity!!)
+
+        // draw route on map
+        // TODO
 
         return view
     }
