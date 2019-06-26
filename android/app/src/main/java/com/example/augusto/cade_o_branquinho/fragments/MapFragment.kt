@@ -2,6 +2,7 @@ package com.example.augusto.cade_o_branquinho.fragments
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
+import android.graphics.Color
 import android.location.Location
 import android.os.Bundle
 import android.os.Handler
@@ -21,10 +22,7 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.Marker
-import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.*
 import io.ticofab.androidgpxparser.parser.GPXParser
 import io.ticofab.androidgpxparser.parser.domain.Gpx
 import kotlinx.android.synthetic.main.bus_stop_detail.view.*
@@ -82,12 +80,6 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
         // cria um socket para receber a localização do bus
         webSocket = WebSocketUtils().openSocket(this)
 
-        // get the locations of the bus' route
-        val busRoutePoints = GPXUtils().getPoints(activity!!)
-
-        // draw route on map
-        // TODO
-
         return view
     }
 
@@ -98,6 +90,10 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
     override fun onMapReady(p0: GoogleMap?) {
         map = p0!!
         map.uiSettings.isRotateGesturesEnabled = false
+
+        // get the locations of the bus' route
+        val busRoutePoints = GPXUtils().getPoints(activity!!)
+        drawBusRoute(busRoutePoints)
 
         for (item in busStops) {
             val pos = item.getLocation()
@@ -289,6 +285,18 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
             currentLocationMarker!!.position = latLng
             currentLocationMarker!!.rotation = rotation
 
+        currentLocationMarker!!.setIcon(BitmapDescriptorFactory.fromResource(BusMarkerUtils.getDrawableId(rotation)))
+    }
+
+    private fun drawBusRoute(points: ArrayList<LatLng>) {
+
+        val lineOptions = PolylineOptions()
+
+        lineOptions.addAll(points)
+        lineOptions.width(12f)
+        lineOptions.color(Color.parseColor("#FF7583"))
+
+        map.addPolyline(lineOptions)
     }
 
 }

@@ -41,8 +41,8 @@ class BusMarkerUtils {
             when (bearing) {
                 in 0..89 -> return R.drawable.bus5
                 in 90..179 -> return R.drawable.bus7
-                in 180..269 -> return R.drawable.bus3
-                in 270..359-> return R.drawable.bus1
+                in 180..269 -> return R.drawable.bus1
+                in 270..359-> return R.drawable.bus3
                 else -> return R.drawable.bus1
             }
         }
