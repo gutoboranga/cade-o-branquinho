@@ -32,4 +32,8 @@ class TimesFragment : Fragment() {
         return view
     }
 
+    fun updateNextDeparture() {
+        sectionsPagerAdapter?.updateNextDeparture()
+    }
+
 }

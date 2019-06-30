@@ -1,5 +1,6 @@
 package com.example.augusto.cade_o_branquinho.utils
 
+import com.example.augusto.cade_o_branquinho.model.DayType
 import java.util.*
 import kotlin.math.min
 
@@ -62,6 +63,27 @@ class TimeManager() {
         return next
     }
 
+    fun getNextDepartureSaturday(): DepartureTime? {
+        val times = DepartureTimes.saturdays
+
+        var next: DepartureTime? = DepartureTime(0,0)
+        val now= now()
+
+        for (i in 0..(times.size - 1)) {
+            val time= now()
+
+            time.hours = times[i].hour
+            time.minutes = times[i].minute
+
+            if (now.compareTo(time) < 0) {
+                next = times[i]
+                break
+            }
+        }
+
+        return next
+    }
+
     fun hasPassed(time: DepartureTime): Boolean {
         val timeDate= now()
 
@@ -95,6 +117,16 @@ class TimeManager() {
 
     private fun now(): Date {
         return Calendar.getInstance().time
+    }
+
+    fun getTodayType(): DayType {
+        val now = now()
+
+        when(now.day) {
+            in 1..(SAT-1) -> return DayType.WEEKDAY
+            SAT -> return DayType.SATURDAY
+            else -> return DayType.SUNDAY
+        }
     }
 
 }

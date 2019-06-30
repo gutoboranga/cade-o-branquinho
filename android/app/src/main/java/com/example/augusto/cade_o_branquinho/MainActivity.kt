@@ -35,6 +35,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
             }
             R.id.navigation_times -> {
                 showTimesToolbar()
+                timesFragment.updateNextDeparture()
                 transaction.hide(mapFragment)
                 transaction.hide(warningsFragment)
                 transaction.show(timesFragment)

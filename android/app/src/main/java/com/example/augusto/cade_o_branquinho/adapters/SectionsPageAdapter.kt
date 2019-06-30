@@ -31,4 +31,9 @@ class SectionsPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
         }
         return null
     }
+
+    fun updateNextDeparture() {
+        weekDaysTimesFragment.updateNextDeparture()
+        saturdayTimesFragment.updateNextDeparture()
+    }
 }
