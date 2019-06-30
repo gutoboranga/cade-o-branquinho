@@ -7,8 +7,8 @@ import java.util.concurrent.TimeUnit
 
 class WebSocketUtils() {
 
-    val SERVER_URL = "ws://cade-o-branquinho-server.herokuapp.com/websocket"
-//    val SERVER_URL = "ws://143.54.8.186:5000/websocket"
+//    val SERVER_URL = "ws://cade-o-branquinho-server.herokuapp.com/websocket"
+    val SERVER_URL = "ws://192.168.25.3:5000/websocket"
 
     fun openSocket(wslistener: WSListener): WebSocket {
         val client = OkHttpClient.Builder()

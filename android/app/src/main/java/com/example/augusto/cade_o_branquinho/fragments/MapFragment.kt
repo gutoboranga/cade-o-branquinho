@@ -50,10 +50,11 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
     // bus location vars
     var currentBusLocation: BusLocation? = null
     private var currentLocationMarker: Marker? = null
+    private val proximityThreshold: Float = 20f
 
     // web socket vars
     private var webSocket: WebSocket? = null
-    private var shouldRetryConnection = false
+    private lateinit var serverConnectionUpdater: Runnable
     private var shouldShowConnectionError = true
 
     // other vars
@@ -77,7 +78,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
         configureDeparturesUpdater()
         departuresUpdater.run()
 
-        // cria um socket para receber a localização do bus
+        // cria um socket para receber a localização
         webSocket = WebSocketUtils().openSocket(this)
 
         return view
@@ -128,14 +129,10 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
 
 
     private fun configureDeparturesUpdater() {
-        val listener = this
         departuresUpdater = object : Runnable {
             override fun run() {
                 updateDepartures()
                 Handler().postDelayed(this, 5000)
-                if (shouldRetryConnection) {
-                    webSocket = WebSocketUtils().openSocket(listener)
-                }
             }
         }
     }
@@ -198,13 +195,8 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
 
 
     override fun onOpen(webSocket: WebSocket, response: Response) {
-        val mainHandler = Handler(Looper.getMainLooper())
-
-        val runnable = Runnable { Toast.makeText(context, "Conectado ao servidor", Toast.LENGTH_SHORT).show() }
-
-        mainHandler.post(runnable)
-        shouldRetryConnection = false
-        shouldShowConnectionError = true
+        showToast("Conectado ao servidor")
+        shouldShowConnectionError = false
     }
 
     override fun onMessage(webSocket: WebSocket?, text: String?) {
@@ -218,6 +210,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
             val runnable = Runnable {
                 showMarker(currentBusLocation!!)
             }
+            checkProximity(currentBusLocation!!)
             mainHandler.post(runnable)
         }
     }
@@ -231,9 +224,10 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
             showWarning("Fim da conexão", message, false)
         }
         else {
-            Toast.makeText(context!!, message, Toast.LENGTH_SHORT).show()
+            showToast(message)
         }
-        this.webSocket = null
+
+        this.webSocket = WebSocketUtils().openSocket(this)
     }
 
     override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) {
@@ -243,9 +237,18 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
             shouldShowConnectionError = false
             showWarning("Erro de conexão", "${shortMessage}. Tente novamente em seguida.", false)
         } else {
-            Toast.makeText(context!!, shortMessage, Toast.LENGTH_SHORT).show()
+            showToast(shortMessage)
         }
-        this.webSocket = null
+
+        this.webSocket = WebSocketUtils().openSocket(this)
+    }
+
+    private fun showToast(message: String) {
+        val mainHandler = Handler(Looper.getMainLooper())
+
+        val runnable = Runnable { Toast.makeText(context, message, Toast.LENGTH_SHORT).show() }
+
+        mainHandler.post(runnable)
     }
 
     private fun showWarning(title: String, message: String, isSending: Boolean) {
@@ -258,6 +261,8 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
                         setTitle(title).
                         setMessage(message).
                         setNeutralButton("Ok", null).create()
+
+//                Toast.makeText(context!!, )
 
                 dialog.show()
 
@@ -297,6 +302,38 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
         lineOptions.color(Color.parseColor("#FF7583"))
 
         map.addPolyline(lineOptions)
+    }
+
+    private fun checkProximity(current: BusLocation) {
+
+        // localização do bus
+        val bus = current.getLocation()
+
+        // percorre a lista de paradas
+        for (b in busStops) {
+            val busStop = b.getLocation()
+
+            // calcula distância do bus pra parada
+            val results = FloatArray(1)
+            Location.distanceBetween(busStop.latitude, busStop.longitude, bus.latitude, bus.longitude, results)
+
+            // se o bus está perto o suficiente da parada
+            if (results[0] < proximityThreshold) {
+
+                // se ainda não estava perto suficiente na coordenada anterior
+                if (!b.busIsHere) {
+                    // corrige os horários, etc (TODO)
+                    println("\t> Tá na parada ${b.getName()}")
+                    b.busIsHere = true
+                }
+                break
+            }
+            // se não estiver perto o suficiente, seta var de controle para falso e segue o baile
+            else {
+                b.busIsHere = false
+            }
+        }
+
     }
 
 }

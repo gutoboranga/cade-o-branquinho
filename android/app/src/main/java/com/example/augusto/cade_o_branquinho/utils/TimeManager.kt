@@ -65,8 +65,6 @@ class TimeManager() {
     fun hasPassed(time: DepartureTime): Boolean {
         val timeDate= now()
 
-        println("NOW: ${timeDate.hours}:${timeDate.minutes}")
-
         timeDate.hours = time.hour
         timeDate.minutes = time.minute
 
