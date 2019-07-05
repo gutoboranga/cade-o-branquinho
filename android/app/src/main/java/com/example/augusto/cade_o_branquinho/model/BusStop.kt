@@ -8,6 +8,7 @@ enum class BusStop {
     TERMINAL, REPRESA, MARITIMO, IPH, BENTO, APLICACAO, PONTE, POLAR, FAURGS, TECNOLOGOS, BLOCO_4, CREAL;
 
     var nextTime: DepartureTime = DepartureTime(0,0)
+    var minutesToAdd: Int = 0
     var busIsHere = false
 
     fun getName(): String {
@@ -55,7 +56,7 @@ enum class BusStop {
             REPRESA ->"REPRESA"
             MARITIMO ->"MARITIMO"
             IPH ->"IPH"
-            BENTO->"BENT"
+            BENTO->"BENTO"
             APLICACAO ->"APLICACAO"
             PONTE ->"PONTE"
             POLAR ->"POLAR"

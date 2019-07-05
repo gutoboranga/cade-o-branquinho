@@ -1,6 +1,5 @@
 package com.example.augusto.cade_o_branquinho.fragments
 
-import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.graphics.Color
 import android.location.Location
@@ -23,13 +22,11 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
-import io.ticofab.androidgpxparser.parser.GPXParser
-import io.ticofab.androidgpxparser.parser.domain.Gpx
 import kotlinx.android.synthetic.main.bus_stop_detail.view.*
 import okhttp3.Response
 import okhttp3.WebSocket
 import okio.ByteString
-import java.lang.Exception
+import java.util.*
 
 class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener, WSListener {
 
@@ -46,6 +43,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
     private var lastDeparture: DepartureTime? = null
     private var nextDeparture: DepartureTime? = null
     private lateinit var lastDepartureLabel: TextView
+    private var busStopsMarkers: ArrayList<Marker> = arrayListOf()
 
     // bus location vars
     var currentBusLocation: BusLocation? = null
@@ -72,7 +70,12 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
 
         jsonUtils = JsonUtils(context!!)
         timeMeasurement = TimeMeasurent(jsonUtils)
+
+        // inicializa a lista de paradas
         busStops = BusStop.all()
+        for (b in busStops) {
+            b.minutesToAdd = timeMeasurement.getNextTime(b.getId())
+        }
 
         // configura timer para atualizar os tempos nas paradas a cada x segundos
         configureDeparturesUpdater()
@@ -98,12 +101,13 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
 
         for (item in busStops) {
             val pos = item.getLocation()
-            map.addMarker(MarkerOptions()
+            val marker = map.addMarker(MarkerOptions()
                     .position(pos)
                     .title(item.name)
                     .icon(BitmapDescriptorFactory.fromResource(item.getMarkerIcon()))
                     .snippet(item.getId().toString())
             )
+            busStopsMarkers.add(marker)
         }
         map.setOnMarkerClickListener(this)
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(mapCenter, mapInitialZoom))
@@ -195,7 +199,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
 
 
     override fun onOpen(webSocket: WebSocket, response: Response) {
-        showToast("Conectado ao servidor")
+//        showToast("Conectado ao servidor")
         shouldShowConnectionError = false
     }
 
@@ -224,7 +228,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
             showWarning("Fim da conexão", message, false)
         }
         else {
-            showToast(message)
+//            showToast(message)
         }
 
         this.webSocket = WebSocketUtils().openSocket(this)
@@ -237,7 +241,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
             shouldShowConnectionError = false
             showWarning("Erro de conexão", "${shortMessage}. Tente novamente em seguida.", false)
         } else {
-            showToast(shortMessage)
+//            showToast(shortMessage)
         }
 
         this.webSocket = WebSocketUtils().openSocket(this)
@@ -284,13 +288,14 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
         if (currentLocationMarker == null)
             currentLocationMarker = map.addMarker(MarkerOptions()
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.bus1))
-                    .position(latLng)
-                    .rotation(rotation))
+                    .position(latLng))
+//                    .rotation(rotation))
         else
             currentLocationMarker!!.position = latLng
-            currentLocationMarker!!.rotation = rotation
+//            currentLocationMarker!!.rotation = rotation
 
-        currentLocationMarker!!.setIcon(BitmapDescriptorFactory.fromResource(BusMarkerUtils.getDrawableId(rotation)))
+//        currentLocationMarker!!.setIcon(BitmapDescriptorFactory.fromResource(BusMarkerUtils.getDrawableId(rotation)))
+        currentLocationMarker!!.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.busao))
     }
 
     private fun drawBusRoute(points: ArrayList<LatLng>) {
@@ -308,32 +313,57 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
 
         // localização do bus
         val bus = current.getLocation()
+        var amountToCorrect: Int = 0
 
         // percorre a lista de paradas
         for (b in busStops) {
-            val busStop = b.getLocation()
-
-            // calcula distância do bus pra parada
-            val results = FloatArray(1)
-            Location.distanceBetween(busStop.latitude, busStop.longitude, bus.latitude, bus.longitude, results)
-
-            // se o bus está perto o suficiente da parada
-            if (results[0] < proximityThreshold) {
-
-                // se ainda não estava perto suficiente na coordenada anterior
-                if (!b.busIsHere) {
-                    // corrige os horários, etc (TODO)
-                    println("\t> Tá na parada ${b.getName()}")
-                    b.busIsHere = true
-                }
+            if (busIsCloseEnough(b.getLocation(), bus)) {
+                amountToCorrect = calculateAmountToCorrect(b)
+                busArrivedToBusStop(b, amountToCorrect)
                 break
-            }
-            // se não estiver perto o suficiente, seta var de controle para falso e segue o baile
-            else {
-                b.busIsHere = false
             }
         }
 
+    }
+
+    fun busIsCloseEnough(busStop: LatLng, bus: Location): Boolean {
+        // calcula distância do bus pra parada
+        val results = FloatArray(1)
+        Location.distanceBetween(busStop.latitude, busStop.longitude, bus.latitude, bus.longitude, results)
+
+        return results[0] < proximityThreshold
+    }
+
+    private fun busArrivedToBusStop(busStop: BusStop, m: Int) {
+
+//        busStop.busIsHere = true
+        println("\t> Tá na parada ${busStop.getName()}")
+
+        // update this bus
+        val nextTime = timeManager.getNextTimeBusStop(busStop.minutesToAdd, timeManager.getTodayType())
+        if (nextTime != null) {
+            busStop.nextTime = nextTime
+        }
+
+//        var shouldCorrect = false
+//        for (b in busStops) {
+//            if (shouldCorrect) {
+//                println("\t> Ajustei ${b.getName()}, m=${m}")
+//                b.nextTime.sum(m)
+//            } else if (b.getId() == busStop.getId()) {
+//                shouldCorrect = true
+//            }
+//        }
+
+    }
+
+    // dá a diferença do horário esperado para o horário em que o ônibus passou de fato.
+    // esse valor será usado para corrigir os horários previstos nas próximas paradas.
+    fun calculateAmountToCorrect(b: BusStop): Int {
+
+        val m = timeManager.getDiffInMinutes(TimeManager.nowDate(), b.nextTime.getDate())
+        println("> ${m} minutes")
+        return m
     }
 
 }

@@ -1,5 +1,7 @@
 package com.example.augusto.cade_o_branquinho.utils
 
+import java.util.*
+
 class DepartureTimes {
 
     companion object {
@@ -54,6 +56,15 @@ class DepartureTime() {
         }
 
         return this.hour.toString() + ":" + minStr
+    }
+
+    fun getDate(): Date {
+        val date = TimeManager.nowDate()
+
+        date.hours = this.hour
+        date.minutes = this.minute
+
+        return date
     }
 
 }

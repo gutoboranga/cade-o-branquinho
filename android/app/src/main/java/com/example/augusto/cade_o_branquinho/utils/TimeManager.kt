@@ -1,13 +1,16 @@
 package com.example.augusto.cade_o_branquinho.utils
 
+import com.example.augusto.cade_o_branquinho.model.BusStop
 import com.example.augusto.cade_o_branquinho.model.DayType
 import java.util.*
-import kotlin.math.min
+import kotlin.collections.ArrayList
+
 
 class TimeManager() {
 
     val SUN = 0
     val SAT = 6
+    val ONE_MINUTE_IN_MILLIS: Long = 60000
 
     fun getLastDeparture(): DepartureTime? {
 
@@ -126,6 +129,53 @@ class TimeManager() {
             in 1..(SAT-1) -> return DayType.WEEKDAY
             SAT -> return DayType.SATURDAY
             else -> return DayType.SUNDAY
+        }
+    }
+
+    fun getNextTimeBusStop(delayFromStart: Int, dayType: DayType): DepartureTime? {
+
+        lateinit var times: ArrayList<DepartureTime>
+
+        if (dayType == DayType.WEEKDAY) {
+            times = DepartureTimes.weekdays
+        } else if (dayType == DayType.SATURDAY) {
+            times = DepartureTimes.saturdays
+        } else {
+            return null
+        }
+
+        val now= now()
+
+        // procura na lista o proximo horário para aquela parada específica
+        for (i in 0..(times.size - 1)) {
+            val departureTime= now()
+
+            departureTime.hours = times[i].hour
+            departureTime.minutes = times[i].minute
+
+            val timeInMS = departureTime.getTime()
+            val time = Date(timeInMS + delayFromStart * ONE_MINUTE_IN_MILLIS)
+
+            if (now.compareTo(time) < 0) {
+                return DepartureTime(time.hours, time.minutes)
+            }
+        }
+
+        return null
+
+    }
+
+    fun getDiffInMinutes(date1: Date, date2: Date): Int {
+        /* this function get the difference between date1 and date2
+     * represented in minutes
+     * assume that the formate is HH:MM */
+        val diff = date1.time - date2.time
+        return ((diff / 1000) / 60).toInt()
+    }
+
+    companion object {
+        fun nowDate(): Date {
+            return Calendar.getInstance().time
         }
     }
 
