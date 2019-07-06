@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <View
+        android:id="@+id/warning.line"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="1px"
+        android:backgroundTint="#CCCCCC"
+        android:layout_marginLeft="70px"
+        android:layout_marginRight="100px"
+        android:visibility="visible"
+        />
+
+    <TextView
+        android:id="@+id/warning.date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginLeft="100px"
+        android:layout_marginRight="100px"
+        android:textSize="12dp"
+        android:layout_marginTop="50px"
+        android:textColor="#319BD5"
+        android:textStyle="bold"
+        android:text="23 DE MAIO DE 2019"
+        />
+
+    <TextView
+        android:id="@+id/warning.message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/warning.date"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginLeft="100px"
+        android:layout_marginRight="100px"
+        android:textSize="18dp"
+        android:layout_marginTop="26px"
+        android:layout_marginBottom="50px"
+        android:fontFamily="@font/nunito_sans_regular"
+        android:text="ônibus funcionando normalmente"
+        />
+
+
+</android.support.constraint.ConstraintLayout>

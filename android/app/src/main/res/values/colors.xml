@@ -5,4 +5,9 @@
     <color name="colorAccent">#B2CF13</color>
     <color name="defaultTextColor">#FFFFFF</color>
     <color name="darkTextColor">#222222</color>
+
+    <color name="greenOnColor">#6BD461</color>
+    <color name="redOffColor">#F24343</color>
+    <color name="yellowUndefinedColor">#F3BA41</color>
+    <color name="lineColor">#444444</color>
 </resources>
