@@ -77,7 +77,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
 
     fun showWarningsToolbar() {
         supportActionBar!!.elevation = applicationContext.resources.getDimension(R.dimen.tab_layout_elevation)
-        supportActionBar!!.title = "Avisos"
+        supportActionBar!!.title = "Status"
     }
 
     fun showTimesToolbar() {

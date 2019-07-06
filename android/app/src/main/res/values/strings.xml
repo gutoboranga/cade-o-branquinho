@@ -1,7 +1,8 @@
 <resources>
     <string name="app_name">Cadê o branquinho?</string>
     <string name="title_map">Mapa</string>
-    <string name="title_warnings">Avisos</string>
+    <string name="title_warnings">Status</string>
     <string name="title_times">Horários</string>
     <string name="google_maps_key">AIzaSyBS8Ovi59Bfs8m2PlLVZfG-g0gupRPPdVA</string>
+    <string name="status_disclaimer_text">Esta previsão é uma estimativa baseada nos dados obtidos no <a href="https://www.ufrgs.br/bibiph/categoria/onibus-circular/">site do BIBIPH</a>.</string>
 </resources>

@@ -1,18 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/warnings_fragment.text"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/warnings_fragment.recycler"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:textColor="#333"
-        android:textSize="32sp"
-        android:textStyle="bold"
-        android:maxLines="3"
-        android:text="AVISOS"
-        />
+        android:layout_height="match_parent" />
 
-</android.support.constraint.ConstraintLayout>
+</LinearLayout>

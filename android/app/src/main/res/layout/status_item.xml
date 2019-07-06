@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ImageView
+        android:id="@+id/status.icon"
+        android:layout_height="140px"
+        android:layout_width="140px"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginLeft="80px"
+        android:layout_marginTop="100px"
+        android:src="@drawable/on">
+    </ImageView>
+
+    <TextView
+        android:id="@+id/status.label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginLeft="260px"
+        android:layout_marginRight="60px"
+        android:textSize="18dp"
+        android:layout_marginTop="120px"
+        android:text="APARENTEMENTE NORMAL"
+        android:textStyle="bold"
+        android:textColor="@color/greenOnColor"/>
+
+    <TextView
+        android:id="@+id/status.disclaimer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/status.icon"
+        app:layout_constraintStart_toStartOf="@id/status.icon"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="24px"
+        android:layout_marginLeft="100px"
+        android:layout_marginRight="100px"
+        android:layout_marginBottom="60px"
+        android:textSize="14dp"
+        android:text="@string/status_disclaimer_text"
+        />
+
+
+</android.support.constraint.ConstraintLayout>
