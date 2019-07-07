@@ -28,6 +28,12 @@ import okhttp3.Response
 import okhttp3.WebSocket
 import okio.ByteString
 import java.util.*
+import com.google.android.gms.maps.model.LatLng
+import android.os.SystemClock
+import android.view.animation.BounceInterpolator
+import com.google.android.gms.maps.Projection
+
+
 
 class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener, WSListener {
 
@@ -102,13 +108,13 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
 
         for (item in busStops) {
             val pos = item.getLocation()
-            val marker = map.addMarker(MarkerOptions()
-                    .position(pos)
-                    .title(item.name)
-                    .icon(BitmapDescriptorFactory.fromResource(item.getMarkerIcon()))
-                    .snippet(item.getId().toString())
+            busStopsMarkers.add(
+                    map.addMarker(MarkerOptions()
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.bus1))
+                            .position(pos)
+                            .icon(BitmapDescriptorFactory.fromResource(item.getMarkerIcon()))
+                            .snippet(item.getId()))
             )
-            busStopsMarkers.add(marker)
         }
         map.setOnMarkerClickListener(this)
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(mapCenter, mapInitialZoom))
@@ -216,8 +222,8 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
             val mainHandler = Handler(Looper.getMainLooper())
             val runnable = Runnable {
                 showMarker(currentBusLocation!!)
+                checkProximity(currentBusLocation!!)
             }
-//            checkProximity(currentBusLocation!!)
             mainHandler.post(runnable)
         }
     }
@@ -316,14 +322,24 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
 
         // localização do bus
         val bus = current.getLocation()
-        var amountToCorrect: Int = 0
+//        var amountToCorrect: Int = 0
 
         // percorre a lista de paradas
-        for (b in busStops) {
+        for (i in 0..(busStops.size - 1)) {
+            val b = busStops[i]
+
             if (busIsCloseEnough(b.getLocation(), bus)) {
-                amountToCorrect = calculateAmountToCorrect(b)
-                busArrivedToBusStop(b, amountToCorrect)
+                if (!b.busIsHere) {
+                    //                amountToCorrect = calculateAmountToCorrect(b)
+//                busArrivedToBusStop(b, amountToCorrect)
+                    println("\t> Tá na parada ${b.getName()}")
+                    bounce(i)
+                }
+                b.busIsHere = true
                 break
+
+            } else {
+                b.busIsHere = false
             }
         }
 
@@ -365,6 +381,41 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
         val m = timeManager.getDiffInMinutes(TimeManager.nowDate(), b.nextTime.getDate())
         println("> ${m} minutes")
         return m
+    }
+
+    fun bounce(index: Int) {
+        if (index >= busStopsMarkers.size) {
+            return
+        }
+
+        val marker = busStopsMarkers[index]
+        val handler = Handler()
+
+        val startTime = SystemClock.uptimeMillis()
+        val duration: Long = 1000
+
+        val proj = map.getProjection()
+        val markerLatLng = marker.getPosition()
+        val startPoint = proj.toScreenLocation(markerLatLng)
+        startPoint.offset(0, -50)
+        val startLatLng = proj.fromScreenLocation(startPoint)
+
+        val interpolator = BounceInterpolator()
+
+        handler.post(object : Runnable {
+            override fun run() {
+                val elapsed = SystemClock.uptimeMillis() - startTime
+                val t = interpolator.getInterpolation(elapsed.toFloat() / duration)
+                val lng = t * markerLatLng.longitude + (1 - t) * startLatLng.longitude
+                val lat = t * markerLatLng.latitude + (1 - t) * startLatLng.latitude
+                marker.setPosition(LatLng(lat, lng))
+
+                if (t < 1.0) {
+                    // Post again 16ms later.
+                    handler.postDelayed(this, 16)
+                }
+            }
+        })
     }
 
 }
