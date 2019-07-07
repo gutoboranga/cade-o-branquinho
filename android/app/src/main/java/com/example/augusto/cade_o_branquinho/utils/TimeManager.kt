@@ -27,7 +27,7 @@ class TimeManager() {
     private fun getLastDepartureWeek(): DepartureTime {
         val times = DepartureTimes.weekdays
 
-        var last = DepartureTime(0,0)
+        var last = DepartureTime.INVALID()
         val now= now()
 
         for (i in 0..(times.size - 1)) {
@@ -80,7 +80,7 @@ class TimeManager() {
     fun getNextDepartureSaturday(): DepartureTime? {
         val times = DepartureTimes.saturdays
 
-        var next: DepartureTime? = DepartureTime(0,0)
+        var next: DepartureTime? = DepartureTime.INVALID()
         val now= now()
 
         for (i in 0..(times.size - 1)) {
@@ -110,7 +110,7 @@ class TimeManager() {
     private fun getLastDepartureSaturday(): DepartureTime {
         val times = DepartureTimes.saturdays
 
-        var last = DepartureTime(0,0)
+        var last = DepartureTime.INVALID()
         val now= now()
 
         for (i in 0..(times.size - 1)) {

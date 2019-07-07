@@ -6,7 +6,7 @@ import com.google.android.gms.maps.model.LatLng
 enum class BusStop {
     TERMINAL, REPRESA, MARITIMO, IPH, BENTO, APLICACAO, PONTE, POLAR, FAURGS, TECNOLOGOS, BLOCO_4, CREAL;
 
-    var nextTime: DepartureTime = DepartureTime(0,0)
+    var nextTime: DepartureTime = DepartureTime.INVALID()
     var minutesToAdd: Int = 0
     var busIsHere = false
 
