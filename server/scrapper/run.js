@@ -24,6 +24,13 @@ function getAlerts(callback) {
   httpRequest.send();
 }
 
+var decodeHtmlEntity = function(str) {
+  // from https://gist.github.com/CatTail/4174511
+  return str.replace(/&#(\d+);/g, function(match, dec) {
+    return String.fromCharCode(dec);
+  });
+};
+
 function scrape(dom) {
     alerts = []
 
@@ -37,10 +44,8 @@ function scrape(dom) {
             // get text
             let header = postContent.getElementsByTagName('header')[0]
             let a = header.getElementsByTagName('a')[0]
-            let text = a.getElementsByTagName('h5')[0].innerHTML.trim()
-            
-            console.log(text);
-        
+            let text = decodeHtmlEntity(a.getElementsByTagName('h5')[0].innerHTML.trim())
+
             // get date
             let footer = postContent.getElementsByTagName('footer')[0]
             let date = footer.getElementsByClassName('postdate')[0].innerHTML.trim()
