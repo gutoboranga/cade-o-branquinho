@@ -10,10 +10,10 @@ var scrapper = require('../scrapper/run.js');
 const app = express();
 
 function parse_msg(msg) {
-  /* Given a (unparsed) message object from scrapper module, 
-      returns it as a JSON with the extra key 'status', 
+  /* Given a (unparsed) message object from scrapper module,
+      returns it as a JSON with the extra key 'status',
         indicating whether the message text is positive, negative or undefined
-  */ 
+  */
 
   let has_not = msg.toLowerCase().search("não") >= 0;
   let has_circula = msg.toLowerCase().search("circula") >= 0;
@@ -324,7 +324,7 @@ setInterval(function() {
     if (currentDataSent >= data.length) {
         currentDataSent = 0
     }
-}, 500);
+}, 1500);
 
 app.ws('/websocket-provider', function(ws, req) {
   console.log(">>> Provider connected");
@@ -340,21 +340,15 @@ app.ws('/websocket-provider', function(ws, req) {
   };
 });
 
-app.get('/status', (req, res) => {
-  scrapper.getAlerts(function(alerts) { 
-    receive_alerts(alerts, function(statuses) { 
+app.get('/status', function (req, res) {
+  scrapper.getAlerts(function(alerts) {
+    receive_alerts(alerts, function(statuses) {
       res.send({
         "past_statuses": statuses,
         "current_status": statuses[0]['status']
       });
     });
   });
-})
-
-app.set('port', (process.env.PORT || 5000));
-app.listen(app.get('port'), function() {
-  var port = app.get('port').toString();
-  console.log("Running on port " + port);
 });
 
 app.get('/', function(req, res) {
