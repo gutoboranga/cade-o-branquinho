@@ -214,7 +214,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
             val runnable = Runnable {
                 showMarker(currentBusLocation!!)
             }
-            checkProximity(currentBusLocation!!)
+//            checkProximity(currentBusLocation!!)
             mainHandler.post(runnable)
         }
     }
