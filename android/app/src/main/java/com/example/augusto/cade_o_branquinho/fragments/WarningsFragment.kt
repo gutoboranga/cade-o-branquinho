@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.support.v4.app.Fragment
+import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.LayoutInflater
@@ -19,11 +20,15 @@ import java.io.IOException
 import java.util.concurrent.TimeUnit
 
 
+
+
 class WarningsFragment : Fragment() {
 
     val SERVER_URL = "http://cade-o-branquinho-server.herokuapp.com/status"
     val clientBuilder = OkHttpClient.Builder()
     private lateinit var adapter: WarningsAdapter
+    private lateinit var swipeContainer: SwipeRefreshLayout
+
 
     private fun fetchWarnings(callback : Callback) {
         val client = clientBuilder
@@ -47,6 +52,8 @@ class WarningsFragment : Fragment() {
         fetchWarnings(object : Callback {
             override fun onFailure(call: Call, e: IOException) { Log.e("BRINKS", "Deu ruim na chamada")}
             override fun onResponse(call: Call, response: Response) {
+                swipeContainer.isRefreshing = false
+
                 val responseJSON = JSONObject(response.body()?.string())
                 Log.d("BRINKS", responseJSON.toString())
 
@@ -80,11 +87,15 @@ class WarningsFragment : Fragment() {
         view.warnings_fragment_recycler.adapter = adapter
         view.warnings_fragment_recycler.layoutManager = LinearLayoutManager(context)
 
+        swipeContainer =  view.swipe_container as SwipeRefreshLayout
+        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_dark,
+                                                android.R.color.holo_green_light)
+
+        swipeContainer.setOnRefreshListener {
+            refreshAdapter()
+        }
+
         return view
     }
-
-
-
-
 
 }
