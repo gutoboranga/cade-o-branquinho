@@ -12,6 +12,7 @@ import com.example.augusto.cade_o_branquinho.adapters.WarningsAdapter
 import com.example.augusto.cade_o_branquinho.model.Warning
 import kotlinx.android.synthetic.main.warnings_fragment_layout.view.*
 import okhttp3.*
+import org.json.JSONObject
 import java.io.IOException
 import java.util.concurrent.TimeUnit
 
@@ -44,31 +45,23 @@ class WarningsFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         Log.d("BRINKS", "WarningsFragment::onCreateView")
 
+
+        val real_data = ArrayList<Warning>()
         fetchWarnings(object : Callback {
             override fun onFailure(call: Call, e: IOException) { Log.e("BRINKS", "Deu ruim na chamada")}
             override fun onResponse(call: Call, response: Response) {
-                Log.d("BRINKS", response.body()?.string())
+                val responseJSON = JSONObject(response.body()?.string())
+                Log.d("BRINKS", responseJSON.toString())
 
-                // depois de parsear as coisas, chama:
-                // updateAdapter(list, "on")
-                // mas com os dados reais
+                val real_statuses = responseJSON.getJSONArray("past_statuses")
+                for (i in 0 until real_statuses.length()) {
+                    val warningJSON = real_statuses.getJSONObject(i)
+                    real_data.add(Warning(warningJSON.getString("text"), warningJSON.getString("date")))
+                }
+
+                adapter.update(real_data, responseJSON.getString("current_status"))
             }
         })
-
-        // apenas pra teste ======================================================================
-
-        val list = arrayListOf<Warning>()
-
-        val w1 = Warning("Bus explodiu", "23 DE MAIO DE 2019")
-        val w2 = Warning("Tá tudo suave", "10 DE JULHO DE 2018")
-
-        list.add(w1)
-        list.add(w2)
-
-        updateAdapter(list, "on")
-
-        // fim do teste ======================================================================
-
 
         val view = inflater.inflate(R.layout.warnings_fragment_layout, container, false)
 
