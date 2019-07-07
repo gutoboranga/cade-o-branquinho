@@ -1,6 +1,8 @@
 package com.example.augusto.cade_o_branquinho.fragments
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
@@ -19,7 +21,7 @@ import java.util.concurrent.TimeUnit
 
 class WarningsFragment : Fragment() {
 
-    val SERVER_URL = "http://192.168.0.4:3000/status"
+    val SERVER_URL = "http://cade-o-branquinho-server.herokuapp.com/status"
     val clientBuilder = OkHttpClient.Builder()
     private lateinit var adapter: WarningsAdapter
 
@@ -59,7 +61,12 @@ class WarningsFragment : Fragment() {
                     real_data.add(Warning(warningJSON.getString("text"), warningJSON.getString("date")))
                 }
 
-                adapter.update(real_data, responseJSON.getString("current_status"))
+                // cria runnable pra poder atualizar a UI na thread principal
+                val mainHandler = Handler(Looper.getMainLooper())
+                val runnable = Runnable {
+                    adapter.update(real_data, responseJSON.getString("current_status"))
+                }
+                mainHandler.post(runnable)
             }
         })
 

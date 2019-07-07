@@ -12,7 +12,7 @@
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginLeft="80px"
         android:layout_marginTop="100px"
-        android:src="@drawable/on">
+        android:src="@drawable/placeholder">
     </ImageView>
 
     <TextView
@@ -25,9 +25,9 @@
         android:layout_marginRight="60px"
         android:textSize="18dp"
         android:layout_marginTop="120px"
-        android:text="APARENTEMENTE NORMAL"
+        android:text="CARREGANDO"
         android:textStyle="bold"
-        android:textColor="@color/greenOnColor"/>
+        android:textColor="@color/grayColor"/>
 
     <TextView
         android:id="@+id/status.disclaimer"

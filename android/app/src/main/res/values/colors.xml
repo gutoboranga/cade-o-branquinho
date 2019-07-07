@@ -10,4 +10,5 @@
     <color name="redOffColor">#F24343</color>
     <color name="yellowUndefinedColor">#F3BA41</color>
     <color name="lineColor">#444444</color>
+    <color name="grayColor">#AAAAAA</color>
 </resources>
