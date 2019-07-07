@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.augusto.cade_o_branquinho.R
 import com.example.augusto.cade_o_branquinho.model.DayType
-import com.example.augusto.cade_o_branquinho.utils.DepartureTime
+import com.example.augusto.cade_o_branquinho.model.DepartureTime
 import com.example.augusto.cade_o_branquinho.utils.DepartureTimes
 import com.example.augusto.cade_o_branquinho.utils.TimeManager
 import kotlinx.android.synthetic.main.times_list_item.view.*
@@ -43,11 +43,7 @@ class TimesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
         // se estiver na tela correspondente ao dia de hoje
         if (mDayType == today) {
             // pega o próximo horário de partida, de acordo com o dia atual
-            if (mDayType == DayType.WEEKDAY) {
-                departure = timeManager.getNextDepartureWeek()
-            } else {
-                departure = timeManager.getNextDepartureSaturday()
-            }
+            departure = timeManager.getNextDeparture(today)
 
             // pega o indice (se houver) do próximo horário de partida na lista
             val index = timesList.map {

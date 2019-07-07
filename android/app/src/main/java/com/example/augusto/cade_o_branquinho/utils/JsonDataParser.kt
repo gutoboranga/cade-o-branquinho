@@ -1,6 +1,7 @@
 package com.example.augusto.cade_o_branquinho.utils
 
 import android.content.Context
+import com.example.augusto.cade_o_branquinho.model.DepartureTime
 import org.json.JSONObject
 
 class JsonDataParser(private var jsonUtils: JsonUtils) {

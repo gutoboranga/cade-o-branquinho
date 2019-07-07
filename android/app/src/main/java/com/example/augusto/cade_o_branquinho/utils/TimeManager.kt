@@ -2,6 +2,7 @@ package com.example.augusto.cade_o_branquinho.utils
 
 import com.example.augusto.cade_o_branquinho.model.BusStop
 import com.example.augusto.cade_o_branquinho.model.DayType
+import com.example.augusto.cade_o_branquinho.model.DepartureTime
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -45,11 +46,20 @@ class TimeManager() {
         return last
     }
 
-    fun getNextDepartureWeek(): DepartureTime? {
-        val times = DepartureTimes.weekdays
+    fun getNextDeparture(dayType: DayType): DepartureTime {
+        var times: ArrayList<DepartureTime>
 
-        var next: DepartureTime? = DepartureTime(0,0)
+        if (dayType == DayType.WEEKDAY) {
+            times = DepartureTimes.weekdays
+        } else if (dayType == DayType.SATURDAY) {
+            times = DepartureTimes.saturdays
+        } else {
+            return DepartureTime.INVALID()
+        }
+
+        var next: DepartureTime = DepartureTime.INVALID()
         val now= now()
+        println("CU")
 
         for (i in 0..(times.size - 1)) {
             val time= now()
@@ -58,6 +68,7 @@ class TimeManager() {
             time.minutes = times[i].minute
 
             if (now.compareTo(time) < 0) {
+                println("FOUND ONE => ${times[i].hour}:${times[i].minute}")
                 next = times[i]
                 break
             }
@@ -132,7 +143,7 @@ class TimeManager() {
         }
     }
 
-    fun getNextTimeBusStop(delayFromStart: Int, dayType: DayType): DepartureTime? {
+    fun getNextTimeBusStop(delayFromStart: Int, dayType: DayType): DepartureTime {
 
         lateinit var times: ArrayList<DepartureTime>
 
@@ -141,7 +152,7 @@ class TimeManager() {
         } else if (dayType == DayType.SATURDAY) {
             times = DepartureTimes.saturdays
         } else {
-            return null
+            return DepartureTime.INVALID()
         }
 
         val now= now()
@@ -161,7 +172,7 @@ class TimeManager() {
             }
         }
 
-        return null
+        return DepartureTime.INVALID()
 
     }
 

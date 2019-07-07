@@ -15,6 +15,7 @@ import android.widget.Toast
 import com.example.augusto.cade_o_branquinho.R
 import com.example.augusto.cade_o_branquinho.model.BusLocation
 import com.example.augusto.cade_o_branquinho.model.BusStop
+import com.example.augusto.cade_o_branquinho.model.DepartureTime
 import com.example.augusto.cade_o_branquinho.utils.*
 
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -144,7 +145,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
     private fun updateDepartures() {
 
         val last = timeManager.getLastDeparture()
-        val next = timeManager.getNextDepartureWeek()
+        val next = timeManager.getNextDeparture(timeManager.getTodayType())
 
         if (last != null && next != null) {
             updateBusStopsNextTime(last, next)
@@ -178,8 +179,10 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
     private fun showBusStopDetail(b: BusStop) {
 
         val view = layoutInflater.inflate(R.layout.bus_stop_detail, null)
+        val text = b.nextTime.getFormatted()
+
         view.bus_stop_detail_header_title.text = b.getName()
-        view.bus_stop_detail_next_time_value_label.text = b.nextTime!!.getFormatted()
+        view.bus_stop_detail_next_time_value_label.text = text
 
         if (b == BusStop.TERMINAL) {
             view.bus_stop_detail_header.setBackgroundColor(resources.getColor(R.color.colorAccent))
@@ -341,9 +344,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMarkerClickListe
 
         // update this bus
         val nextTime = timeManager.getNextTimeBusStop(busStop.minutesToAdd, timeManager.getTodayType())
-        if (nextTime != null) {
-            busStop.nextTime = nextTime
-        }
+        busStop.nextTime = nextTime
 
 //        var shouldCorrect = false
 //        for (b in busStops) {

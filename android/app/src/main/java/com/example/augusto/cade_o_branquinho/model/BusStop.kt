@@ -1,7 +1,6 @@
 package com.example.augusto.cade_o_branquinho.model
 
 import com.example.augusto.cade_o_branquinho.R
-import com.example.augusto.cade_o_branquinho.utils.DepartureTime
 import com.google.android.gms.maps.model.LatLng
 
 enum class BusStop {
