@@ -38,16 +38,11 @@ class WarningsFragment : Fragment() {
 
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        // inicializa o adapter com tudo vazio
-        adapter = WarningsAdapter(activity!!, arrayListOf(), "")
+    private fun updateAdapter(list: ArrayList<Warning>, status: String) {
+        adapter.update(list, status)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        Log.d("BRINKS", "WarningsFragment::onCreateView")
-
-
+    fun refreshAdapter() {
         val real_data = ArrayList<Warning>()
         fetchWarnings(object : Callback {
             override fun onFailure(call: Call, e: IOException) { Log.e("BRINKS", "Deu ruim na chamada")}
@@ -64,11 +59,21 @@ class WarningsFragment : Fragment() {
                 // cria runnable pra poder atualizar a UI na thread principal
                 val mainHandler = Handler(Looper.getMainLooper())
                 val runnable = Runnable {
-                    adapter.update(real_data, responseJSON.getString("current_status"))
+                    updateAdapter(real_data, responseJSON.getString("current_status"))
                 }
                 mainHandler.post(runnable)
             }
         })
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        // inicializa o adapter com tudo vazio
+        adapter = WarningsAdapter(activity!!, arrayListOf(), "")
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        refreshAdapter()
 
         val view = inflater.inflate(R.layout.warnings_fragment_layout, container, false)
 
@@ -78,9 +83,7 @@ class WarningsFragment : Fragment() {
         return view
     }
 
-    fun updateAdapter(list: ArrayList<Warning>, status: String) {
-        adapter.update(list, status)
-    }
+
 
 
 

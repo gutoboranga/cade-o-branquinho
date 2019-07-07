@@ -30,8 +30,9 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
             R.id.navigation_warnings -> {
                 showWarningsToolbar()
                 transaction.hide(mapFragment)
-                transaction.show(warningsFragment)
                 transaction.hide(timesFragment)
+                warningsFragment.refreshAdapter()
+                transaction.show(warningsFragment)
             }
             R.id.navigation_times -> {
                 showTimesToolbar()
